@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 
 # Add the necessary imports for the starter code.
 import pandas as pd
-import joblib
+import pickle
 from data import process_data
 from model import train_model, inference, compute_model_metrics
 
@@ -24,13 +24,13 @@ cat_features = [
     "sex",
     "native-country",
 ]
-X_train, y_train, encoder, lb = process_data(
+X_train, y_train, encoder, scaler, lb = process_data(
     train, categorical_features=cat_features, label="salary", training=True
 )
 
 # Proces the test data with the process_data function.
-X_test, y_test, encoder, lb = process_data(
-    test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
+X_test, y_test, encoder, scaler, lb = process_data(
+    test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, scaler=scaler, lb=lb
 )
 
 # Train and save a model.
@@ -44,6 +44,7 @@ print("recall:", recall)
 print("fbeta:", fbeta)
 
 # Save artifacts
-joblib.dump(model, '../model/model.pkl')
-joblib.dump(encoder, '../model/encoder.pkl')
-joblib.dump(lb, '../model/lb.pkl')
+pickle.dump(model, open("../model/model.pkl", "wb"))
+pickle.dump(encoder, open("../model/encoder.pkl", 'wb'))
+pickle.dump(scaler, open("../model/scaler.pkl", 'wb'))
+pickle.dump(lb, open("../model/lb.pkl", 'wb'))

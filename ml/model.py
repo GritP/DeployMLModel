@@ -19,7 +19,7 @@ def train_model(X_train, y_train):
         Trained machine learning model.
     """
     algo = HistGradientBoostingClassifier(
-        max_leaf_nodes=15, random_state=0, early_stopping=False
+        max_leaf_nodes=25, random_state=0, early_stopping=False
     )
     model = algo.fit(X_train, y_train)
     return model
