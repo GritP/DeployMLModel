@@ -1,8 +1,8 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import HistGradientBoostingClassifier
 
-import pickle
 import pandas as pd
+
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -51,7 +51,7 @@ def compute_model_metrics(y, preds):
 
 
 def inference(model, X):
-    """ 
+    """
     Runs model inferences and returns the predictions.
 
     Inputs
@@ -68,11 +68,12 @@ def inference(model, X):
     y_pred = model.predict(X)
     return y_pred
 
+
 def compute_slice_metrics(df, feature, y_test, y_pred):
     """
     Computes performance metrics on slices for a given categorical feature.
     A slice corresponds to one value of the categorical feature analyzed.
-    
+
     Inputs
     ------
     df: pandas dataframe
@@ -92,17 +93,19 @@ def compute_slice_metrics(df, feature, y_test, y_pred):
         recall : float
         f1 : float
     Each row corresponds one unique value of the feature.
-    """    
+    """
     slice_values = df[feature].unique().tolist()
-    metrics_df = pd.DataFrame(index=slice_values, columns=['feature','n_samples','precision', 'recall', 'f1'])
+    metrics_df = pd.DataFrame(index=slice_values,
+                              columns=['feature', 'n_samples', 'precision',
+                                       'recall', 'f1'])
 
     for val in slice_values:
-        slice_mask = df[feature]==val
+        slice_mask = df[feature] == val
 
         slice_y = y_test[slice_mask]
         slice_preds = y_pred[slice_mask]
         precision, recall, fbeta = compute_model_metrics(slice_y, slice_preds)
-        
+
         metrics_df.at[val, 'feature'] = feature
         metrics_df.at[val, 'n_samples'] = len(slice_y)
         metrics_df.at[val, 'precision'] = precision
@@ -112,9 +115,7 @@ def compute_slice_metrics(df, feature, y_test, y_pred):
     # reorder first two columns to have feature before feature value
     metrics_df.reset_index(names='feature value', inplace=True)
     colList = list(metrics_df.columns)
-    colList[0], colList[1] =  colList[1], colList[0]
+    colList[0], colList[1] = colList[1], colList[0]
     metrics_df = metrics_df[colList]
-    
-    #print(metrics_df)
 
     return metrics_df

@@ -7,10 +7,11 @@ import os
 import pandas as pd
 import pickle
 from data import process_data
-from model import train_model, inference, compute_model_metrics, compute_slice_metrics
+from model import train_model, inference, compute_model_metrics, \
+    compute_slice_metrics
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     # Add code to load in the data.
     data = pd.read_csv("../data/census.csv")
@@ -18,7 +19,7 @@ if __name__=="__main__":
     # Optional enhancement, use K-fold cross validation instead of a train-test
     # split.
     train, test = train_test_split(data, random_state=42, test_size=0.20,
-                               stratify=data['salary'])
+                                   stratify=data['salary'])
 
     cat_features = [
         "workclass",
@@ -31,14 +32,21 @@ if __name__=="__main__":
         "native-country",
     ]
     X_train, y_train, encoder, lb = process_data(
-        train, categorical_features=cat_features, label="salary", training=True
-    )
+                                        train,
+                                        categorical_features=cat_features,
+                                        label="salary",
+                                        training=True
+                                        )
 
     # Proces the test data with the process_data function.
     X_test, y_test, encoder, lb = process_data(
-        test, categorical_features=cat_features, label="salary", training=False,
-        encoder=encoder, lb=lb
-    )
+                                    test,
+                                    categorical_features=cat_features,
+                                    label="salary",
+                                    training=False,
+                                    encoder=encoder,
+                                    lb=lb
+                                    )
 
     # Train and save a model.
     model = train_model(X_train, y_train)
@@ -46,7 +54,6 @@ if __name__=="__main__":
     pickle.dump(model, open("../model/model.pkl", "wb"))
     pickle.dump(encoder, open("../model/encoder.pkl", 'wb'))
     pickle.dump(lb, open("../model/lb.pkl", 'wb'))
-
 
     # Scoring
     y_pred = inference(model, X_test)
@@ -56,22 +63,18 @@ if __name__=="__main__":
     print("fbeta:", fbeta)
 
     # on individual slices
-    #with open('./slice_output.txt', 'w') as f:
-    #    for feat in cat_features:
-    #        f.write("Investigating performance for {} categories:\n".format(feat))
-    #        slice_metrics = compute_slice_metrics(test, feat, y_test, y_pred)
-    #        f.write(slice_metrics)
-
     if os.path.exists('./slice_output.csv'):
         os.remove('./slice_output.csv')
 
-    metrics_collection = pd.DataFrame(columns=['feature', 'feature value', 'n_samples', 'precision', 'recall', 'f1'])
+    metrics_collection = pd.DataFrame(
+                            columns=['feature', 'feature value', 'n_samples',
+                                     'precision', 'recall', 'f1']
+                            )
     for feat in cat_features:
         slice_metrics = compute_slice_metrics(test, feat, y_test, y_pred)
-        metrics_collection = pd.concat([metrics_collection, slice_metrics], axis=0)
+        metrics_collection = pd.concat(
+                                [metrics_collection, slice_metrics],
+                                axis=0
+                                )
 
     metrics_collection.to_csv('./slice_output.csv', index=False)
-
-
-
-
