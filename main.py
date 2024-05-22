@@ -9,6 +9,7 @@ from ml.data import process_data
 from ml.model import inference
 
 
+# define input data
 class Data(BaseModel):
     age: int
     workclass: str
@@ -25,7 +26,32 @@ class Data(BaseModel):
     hours_per_week: int
     native_country: str
 
+    # add example as described on
+    # https://fastapi.tiangolo.com/tutorial/schema-extra-example/
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {'age': 52,
+                 'workclass': "Self-emp-not-inc",
+                 'fnlgt': 334273,
+                 'education': "Bachelors",
+                 'education_num': 13,
+                 'marital_status': "Married-civ-spouse",
+                 'occupation': "Prof-specialty",
+                 'relationship': "Husband",
+                 'race': "White",
+                 'sex': "Male",
+                 'capital_gain': 0,
+                 'capital_loss': 0,
+                 'hours_per_week': 60,
+                 'native_country': "United-States"
+                 }
+            ]
+        }
+    }
 
+
+# Instantiate app
 app = FastAPI(
     title="Inference API",
     description="An API to perform inference on the provided data.",
@@ -33,13 +59,15 @@ app = FastAPI(
 )
 
 
+# Define welcome get method
 @app.get("/")
 async def welcome():
     return "Welcome to the inference API for census data"
 
 
+# Define predict method to perform inference on posted data
 @app.post("/inference/")
-async def ingest_data(data: Data):
+async def predict(data: Data):
     sample = {'age': data.age,
               'workclass': data.workclass,
               'fnlgt': data.fnlgt,
@@ -71,10 +99,12 @@ async def ingest_data(data: Data):
                     "native-country",
                     ]
 
+    # load model, encoder and binarizer (precautions if files don't exist?)
     model = pickle.load(open("model/model.pkl", "rb"))
     encoder = pickle.load(open("model/encoder.pkl", 'rb'))
     lb = pickle.load(open("model/lb.pkl", 'rb'))
 
+    # process posted data
     sample, _, _, _ = process_data(
                                 sample_df,
                                 categorical_features=cat_features,
@@ -83,7 +113,7 @@ async def ingest_data(data: Data):
                                 lb=lb
                                 )
 
+    # perform inference
     y_pred = inference(model, sample)
-    print(y_pred.tolist())
 
     return y_pred.tolist()
