@@ -87,7 +87,7 @@ def compute_slice_metrics(df, feature, y_test, y_pred):
     Returns
     ------
     metrics_df: pandas dataframe with
-        n_samples: integer - number of data samples in the slice
+        n_samples: integer
         precision : float
         recall : float
         f1 : float
