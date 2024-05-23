@@ -63,8 +63,8 @@ if __name__ == "__main__":
     print("fbeta:", fbeta)
 
     # on individual slices
-    if os.path.exists('./slice_output.csv'):
-        os.remove('./slice_output.csv')
+    if os.path.exists('./slice_output.txt'):
+        os.remove('./slice_output.txt')
 
     metrics_collection = pd.DataFrame(
                             columns=['feature', 'feature value', 'n_samples',
@@ -77,4 +77,4 @@ if __name__ == "__main__":
                                 axis=0
                                 )
 
-    metrics_collection.to_csv('./slice_output.csv', index=False)
+    metrics_collection.to_csv('./slice_output.txt', index=False)
