@@ -2,7 +2,7 @@ import requests
 import json
 
 # test get method and collect response
-#response = requests.get("http://127.0.0.1:8000/")
+# response = requests.get("http://127.0.0.1:8000/")
 response = requests.get("https://deploymlmodel.onrender.com/")
 
 print("response status code:", response.status_code)
@@ -29,7 +29,8 @@ sample = {'age': 52,
 data = json.dumps(sample)
 
 # post to API and collect response
-response = requests.post("https://deploymlmodel.onrender.com/inference?", data=data)
+response = requests.post("https://deploymlmodel.onrender.com/inference?",
+                         data=data)
 
 print("response status code:", response.status_code)
 print("response content:", response.json())
