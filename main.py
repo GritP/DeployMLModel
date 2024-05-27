@@ -8,7 +8,6 @@ import pickle
 from ml.data import process_data
 from ml.model import inference
 
-
 # define input data
 class Data(BaseModel):
     age: int
@@ -58,6 +57,13 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# suggested by reviewer to reduce latency
+@app.on_event("startup")
+async def startup_event(): 
+    global model, encoder, binarizer
+    model = pickle.load(open("./model/model.pkl", "rb"))
+    encoder = pickle.load(open("./model/encoder.pkl", "rb"))
+    binarizer = pickle.load(open("./model/lb.pkl", "rb"))
 
 # Define welcome get method
 @app.get("/")
@@ -99,18 +105,13 @@ async def predict(data: Data):
                     "native-country",
                     ]
 
-    # load model, encoder and binarizer (precautions if files don't exist?)
-    model = pickle.load(open("model/model.pkl", "rb"))
-    encoder = pickle.load(open("model/encoder.pkl", 'rb'))
-    lb = pickle.load(open("model/lb.pkl", 'rb'))
-
     # process posted data
     sample, _, _, _ = process_data(
                                 sample_df,
                                 categorical_features=cat_features,
                                 training=False,
                                 encoder=encoder,
-                                lb=lb
+                                lb=binarizer
                                 )
 
     # perform inference
