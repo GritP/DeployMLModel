@@ -6,15 +6,15 @@ from sklearn.model_selection import train_test_split
 import os
 import pandas as pd
 import pickle
-from data import process_data
-from model import train_model, inference, compute_model_metrics, \
+from ml.data import process_data
+from ml.model import train_model, inference, compute_model_metrics, \
     compute_slice_metrics
 
 
 if __name__ == "__main__":
 
     # Add code to load in the data.
-    data = pd.read_csv("../data/census.csv")
+    data = pd.read_csv("./data/census.csv")
 
     # Optional enhancement, use K-fold cross validation instead of a train-test
     # split.
@@ -51,9 +51,9 @@ if __name__ == "__main__":
     # Train and save a model.
     model = train_model(X_train, y_train)
     # Save artifacts
-    pickle.dump(model, open("../model/model.pkl", "wb"))
-    pickle.dump(encoder, open("../model/encoder.pkl", 'wb'))
-    pickle.dump(lb, open("../model/lb.pkl", 'wb'))
+    pickle.dump(model, open("./model/model.pkl", "wb"))
+    pickle.dump(encoder, open("./model/encoder.pkl", 'wb'))
+    pickle.dump(lb, open("./model/lb.pkl", 'wb'))
 
     # Scoring
     y_pred = inference(model, X_test)

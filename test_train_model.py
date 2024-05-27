@@ -7,14 +7,14 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 from sklearn.metrics import f1_score
 
-from .data import process_data
-from .model import train_model, inference
+from ml.data import process_data
+from ml.model import train_model, inference
 
 
 # Fixtures
 @pytest.fixture(scope="module")
 def data():
-    df = pd.read_csv("../data/census.csv")
+    df = pd.read_csv("./data/census.csv")
     return df
 
 
@@ -77,7 +77,7 @@ def test_train_model(train_dataset):
 
 
 def test_saved_model():
-    with open('../model/model.pkl', 'rb') as f:
+    with open('./model/model.pkl', 'rb') as f:
         model = pickle.load(f)
         f.close()
     assert isinstance(model, HistGradientBoostingClassifier), \
@@ -85,7 +85,7 @@ def test_saved_model():
 
 
 def test_inference(train_dataset):
-    with open('../model/model.pkl', 'rb') as f:
+    with open('./model/model.pkl', 'rb') as f:
         model = pickle.load(f)
         f.close()
     X_train, y_train = train_dataset
@@ -99,7 +99,7 @@ def test_inference(train_dataset):
 
 
 def test_saved_encoder():
-    with open('../model/encoder.pkl', 'rb') as f:
+    with open('./model/encoder.pkl', 'rb') as f:
         encoder = pickle.load(f)
         f.close()
     assert isinstance(encoder, OneHotEncoder), \
@@ -107,7 +107,7 @@ def test_saved_encoder():
 
 
 def test_saved_binarizer():
-    with open('../model/lb.pkl', 'rb') as f:
+    with open('./model/lb.pkl', 'rb') as f:
         lb = pickle.load(f)
         f.close()
     assert isinstance(lb, LabelBinarizer), \
