@@ -1,9 +1,7 @@
 # Model Card
 
-For additional information see the Model Card paper: https://arxiv.org/pdf/1810.03993.pdf
-
 ## Model Details
-This classification model is trained on 1994 Census Bureau data from the UCI Machine Learning Repository (https://archive.ics.uci.edu/dataset/20/census+income). Its aim is to predict whether an individual's yearly income exceeded $50,000 based on the following demographic and socio-economic information:
+This <b>classification model</b> is trained on 1994 Census Bureau data from the UCI Machine Learning Repository (https://archive.ics.uci.edu/dataset/20/census+income). Its aim is to predict whether an individual's yearly income exceeded $50,000 based on the following demographic and socio-economic information:
 - sex
 - race
 - marital status
@@ -17,7 +15,7 @@ This classification model is trained on 1994 Census Bureau data from the UCI Mac
 - capital-gain	
 - capital-loss	
 
-To this end a Histogram-based Gradient Boosting Classifier from scikit-learn version 1.3.2 was used with the following options which were obtained by testing a few combinations without systematic hyperparameter optimization:
+To this end a <b>Histogram-based Gradient Boosting Classifier</b> from scikit-learn version 1.3.2 was used with the following options which were obtained by testing a few combinations without systematic hyperparameter optimization:
 - max_leaf_nodes = 25
 - early_stopping = False
 
@@ -39,11 +37,13 @@ This comprises 20% of the census dataset stratified by target variable. The save
 ## Metrics
 The performance of the trained classification model is assessed using precision, recall, and F1 score.
 For the entire evaluation dataset the following performance measures were obtained:
-precision: 0.7835433654558932
-recall: 0.6741071428571429
-f1: 0.7247171751799795
+| Metric      | Value      |
+| ------------- | ------------- |
+| precision | 0.7835 |
+| recall | 0.6741 |
+| F1   | 0.7247 |
 
-When looking at individual slices of data, the biggest difference were obtained for education categories (especially for levels of high school graduates or lower) and for some native countries like Iran, Canada, and Mexico. The latest results on different slices can be found in slices_output.csv in the ml/ folder.
+When looking at individual slices of data, the worst performance was observed for education categories (especially for levels of high school graduates or lower) and for some native countries like Iran, Canada, and Mexico. The latest results on different slices can be found in slices_output.csv in the ml/ folder.
 
 ## Ethical Considerations
 The used dataset is 30 years old and incomplete in the sense that it only contains 32,561 records and only a limited number of attributes. Therefore, no general conclusions on the income of people of any demographic can be drawn. Furthermore, wrong predictions are expected for demographic groups which are underrepresented in the training data.
