@@ -32,27 +32,27 @@ class Data(BaseModel):
 
     # add example as described on
     # https://fastapi.tiangolo.com/tutorial/schema-extra-example/
-    model_config = {
-        "json_schema_extra": {
-            "examples": [
-                {'age': 52,
-                 'workclass': "Self-emp-not-inc",
-                 'fnlgt': 334273,
-                 'education': "Bachelors",
-                 'education_num': 13,
-                 'marital_status': "Married-civ-spouse",
-                 'occupation': "Prof-specialty",
-                 'relationship': "Husband",
-                 'race': "White",
-                 'sex': "Male",
-                 'capital_gain': 0,
-                 'capital_loss': 0,
-                 'hours_per_week': 60,
-                 'native_country': "United-States"
-                 }
-            ]
-        }
-    }
+    # model_config = {
+    #    "json_schema_extra": {
+    #        "examples": [
+    #            {'age': 52,
+    #             'workclass': "Self-emp-not-inc",
+    #             'fnlgt': 334273,
+    #             'education': "Bachelors",
+    #             'education_num': 13,
+    #             'marital_status': "Married-civ-spouse",
+    #             'occupation': "Prof-specialty",
+    #             'relationship': "Husband",
+    #             'race': "White",
+    #             'sex': "Male",
+    #             'capital_gain': 0,
+    #             'capital_loss': 0,
+    #             'hours_per_week': 60,
+    #             'native_country': "United-States"
+    #             }
+    #        ]
+    #    }
+    # }
 
     class Config:
         alias_generator = hyphen_to_underscore
