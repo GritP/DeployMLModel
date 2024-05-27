@@ -1,6 +1,6 @@
 # Put the code for your API here.
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 import pandas as pd
 import pickle
@@ -9,54 +9,46 @@ from ml.data import process_data
 from ml.model import inference
 
 
-# define input data as suggested by reviewer
-def hyphen_to_underscore(field_name):
-    return f"{field_name}".replace("_", "-")
-
-
+# define input data
 class Data(BaseModel):
-    age: int = Field(..., example=45)
-    workclass: str = Field(..., example="State-gov")
-    fnlgt: int = Field(..., example=2334)
-    education: str = Field(..., example="Bachelors")
-    education_num: int = Field(..., example=13)
-    marital_status: str = Field(..., example="Never-married")
-    occupation: str = Field(..., example="Prof-specialty")
-    relationship: str = Field(..., example="Wife")
-    race: str = Field(..., example="Black")
-    sex: str = Field(..., example="Female")
-    capital_gain: int = Field(..., example=2174)
-    capital_loss: int = Field(..., example=0)
-    hours_per_week: int = Field(..., example=60)
-    native_country: str = Field(..., example="Cuba")
+    age: int
+    workclass: str
+    fnlgt: int
+    education: str
+    education_num: int
+    marital_status: str
+    occupation: str
+    relationship: str
+    race: str
+    sex: str
+    capital_gain: int
+    capital_loss: int
+    hours_per_week: int
+    native_country: str
 
     # add example as described on
     # https://fastapi.tiangolo.com/tutorial/schema-extra-example/
-    # model_config = {
-    #    "json_schema_extra": {
-    #        "examples": [
-    #            {'age': 52,
-    #             'workclass': "Self-emp-not-inc",
-    #             'fnlgt': 334273,
-    #             'education': "Bachelors",
-    #             'education_num': 13,
-    #             'marital_status': "Married-civ-spouse",
-    #             'occupation': "Prof-specialty",
-    #             'relationship': "Husband",
-    #             'race': "White",
-    #             'sex': "Male",
-    #             'capital_gain': 0,
-    #             'capital_loss': 0,
-    #             'hours_per_week': 60,
-    #             'native_country': "United-States"
-    #             }
-    #        ]
-    #    }
-    # }
-
-    class Config:
-        alias_generator = hyphen_to_underscore
-        allow_population_by_field_name = True
+    model_config = {
+       "json_schema_extra": {
+           "examples": [
+               {'age': 52,
+                'workclass': "Self-emp-not-inc",
+                'fnlgt': 334273,
+                'education': "Bachelors",
+                'education_num': 13,
+                'marital_status': "Married-civ-spouse",
+                'occupation': "Prof-specialty",
+                'relationship': "Husband",
+                'race': "White",
+                'sex': "Male",
+                'capital_gain': 0,
+                'capital_loss': 0,
+                'hours_per_week': 60,
+                'native_country': "United-States"
+                }
+           ]
+       }
+    }
 
 
 # Instantiate app
