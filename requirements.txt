@@ -5,4 +5,4 @@ scikit-learn==1.3.2
 uvicorn==0.29.0
 fastapi==0.110.3
 requests==2.31.0
-starlette
+httpx
