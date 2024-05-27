@@ -46,6 +46,14 @@ def train_dataset(data, cat_features):
     return X_train, y_train
 
 
+@pytest.fixture(scope="module")
+def model():
+    with open('./model/model.pkl', 'rb') as f:
+        model = pickle.load(f)
+        f.close()
+    return model
+
+
 # Test functions
 def test_dataset(data):
     assert data.shape[0] > 10000, f"Dataset has only {data.shape[0]} rows."
@@ -76,18 +84,16 @@ def test_train_model(train_dataset):
         "Returned model is not of the expected type."
 
 
-def test_saved_model():
-    with open('./model/model.pkl', 'rb') as f:
-        model = pickle.load(f)
-        f.close()
+def test_saved_model(model):
     assert isinstance(model, HistGradientBoostingClassifier), \
         "Saved model is not of the expected type."
+    # following reviewer's suggestion and using idea from
+    # https://stackoverflow.com/questions/39884009/whats-the-best-way-to-test-whether-an-sklearn-model-has-been-fitted
+    assert hasattr(model, "classes_"), \
+        "Saved model seems not to be fitted."
 
 
-def test_inference(train_dataset):
-    with open('./model/model.pkl', 'rb') as f:
-        model = pickle.load(f)
-        f.close()
+def test_inference(train_dataset, model):
     X_train, y_train = train_dataset
     y_pred = inference(model, X_train)
     assert y_pred.shape == y_train.shape, \
